@@ -17,18 +17,19 @@ export class OpenAIService {
       apiKey: this.configService.get<string>('OPENAI_API_KEY'),
     });
   }
+
   async chatGptRequest(prompt: string, messages: Message[]): Promise<string> {
     try {
       // Convert message history to the format expected by the OpenAI API
-      const history: any = messages.map((message) => ({
-        role: message.ai ? 'assistant' : 'user',
-        content: message.text,
+      const history: any = messages?.map((message) => ({
+        role: message?.ai ? 'assistant' : 'user',
+        content: message?.text,
       }));
 
       // Make a request to the ChatGPT model
       const completion: ChatCompletion =
         await this.openai.chat.completions.create({
-          model: 'gpt-4',
+          model: 'gpt-3.5-turbo',
           messages: [
             {
               role: 'system',
@@ -36,7 +37,7 @@ export class OpenAIService {
             },
             ...history,
           ],
-          temperature: 0.5,
+          temperature: 0.8,
           max_tokens: 1000,
         });
 

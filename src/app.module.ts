@@ -5,17 +5,15 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { ChairModule } from './chair/chair.module';
+import { ChatCompletionModule } from './chat-completion/chat-completion.module';
 import configuration from './configs';
-import { FilmModule } from './film/film.module';
 import { JsonBodyMiddleware } from './middlewares/json-body.middleware';
 import { RawBodyMiddleware } from './middlewares/raw-body.middleware';
+import { OpenaiModule } from './openai/openai.module';
 import { S3Module } from './s3/s3.module';
 import { StoreModule } from './store/store.module';
 import { StripeModule } from './stripe/stripe.module';
 import { UserModule } from './user/user.module';
-import { OpenaiModule } from './openai/openai.module';
-import { ChatCompletionModule } from './chat-completion/chat-completion.module';
 
 @Module({
   imports: [
@@ -37,8 +35,6 @@ import { ChatCompletionModule } from './chat-completion/chat-completion.module';
     UserModule,
     StoreModule,
     StripeModule,
-    FilmModule,
-    ChairModule,
     OpenaiModule,
     ChatCompletionModule,
   ],

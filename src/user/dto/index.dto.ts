@@ -1,6 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsDateString, IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsDateString,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export enum TypeUseEnum {
   AI_ART = 'AI_ART',
@@ -94,6 +100,62 @@ export class CreateUserDto {
   @IsString()
   @Expose()
   redirectUrl: string;
+}
+
+export class UpdateUserDto {
+  @IsOptional()
+  @ApiProperty({ required: false })
+  @IsString()
+  @Expose()
+  firstName: string;
+
+  @IsOptional()
+  @ApiProperty({ required: false })
+  @IsString()
+  @Expose()
+  lastName: string;
+
+  @IsOptional()
+  @ApiProperty({ required: false })
+  @IsString()
+  @Expose()
+  avatar: string;
+
+  @IsOptional()
+  @ApiProperty({ required: false })
+  @IsString()
+  @Expose()
+  telephone: string;
+
+  @IsOptional()
+  @ApiProperty({ required: false })
+  @IsString()
+  @Expose()
+  province: string;
+
+  @IsOptional()
+  @ApiProperty({ required: false })
+  @IsString()
+  @Expose()
+  district: string;
+
+  @IsOptional()
+  @ApiProperty({ required: false })
+  @IsString()
+  @Expose()
+  ward: string;
+
+  @IsOptional()
+  @ApiProperty({ required: false })
+  @IsString()
+  @Expose()
+  address: string;
+
+  @IsOptional()
+  @ApiProperty({ required: false })
+  @IsDateString()
+  @Expose()
+  birthday: string;
 }
 
 export class QueryTypeUseDto {

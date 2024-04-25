@@ -10,7 +10,7 @@ import {
 } from '../utils';
 import { encodePassword } from '../utils/bcrypt';
 import { SuccessRegister } from '../utils/message';
-import { CreateUserDto, QueryTypeUseDto } from './dto/index.dto';
+import { CreateUserDto, QueryTypeUseDto, UpdateUserDto } from './dto/index.dto';
 import { UserDocument } from './model/user.model';
 
 @Injectable()
@@ -33,7 +33,7 @@ export class UserService {
     return await this.UserModel.findOne({ email, isVerified: true }).lean();
   }
 
-  async findUserByEmailNotActive(email: string) {.
+  async findUserByEmailNotActive(email: string) {
     return await this.UserModel.findOne({ email, isVerified: false });
   }
 
@@ -131,7 +131,7 @@ export class UserService {
         password: encodePassword(password),
         ...(user.lastName ? { lastName: user.lastName } : ''),
         // lastName: user.lastName || '',
-        // avatar: user.picture,
+        avatar: user.picture,
         isVerified: true,
       });
     }
@@ -141,6 +141,14 @@ export class UserService {
       refreshToken,
       password,
       email: user.email,
+    };
+  }
+
+  async updateUser(userId: string, body: UpdateUserDto) {
+    await this.UserModel.updateOne({ _id: userId }, body);
+
+    return {
+      message: 'OK',
     };
   }
 }

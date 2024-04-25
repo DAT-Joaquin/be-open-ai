@@ -21,14 +21,14 @@ export class User {
   @Prop({ required: false })
   telephone: string;
 
+  @Prop({ required: false, default: '' })
+  avatar: string;
+
   @Prop({ required: false })
   birthday: Date;
 
   @Prop({ required: false })
   gender: string;
-
-  @Prop({ required: false, default: 0 })
-  pointReward: number;
 
   @Prop({ required: false })
   province: string;
