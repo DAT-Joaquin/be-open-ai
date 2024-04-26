@@ -15,11 +15,8 @@ export class ChatCompletion {
   @Prop({ required: true })
   createdAt: Date;
 
-  @Prop({ required: true, ref: 'User', type: MongooseSchema.Types.ObjectId })
+  @Prop({ required: false, ref: 'User', type: MongooseSchema.Types.ObjectId })
   userId: string;
-
-  @Prop({ required: false, type: MongooseSchema.Types.ObjectId })
-  anonymousId: string;
 }
 
 export const ChatCompletionSchema =

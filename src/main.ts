@@ -28,7 +28,7 @@ async function bootstrap() {
   //   exclude: ['/health'],
   // });
   const options = new DocumentBuilder()
-    .setTitle('API Booking Ticket Film Online')
+    .setTitle('API Assistant AI')
     .setDescription('')
     .setVersion('1.0')
     .addBearerAuth()

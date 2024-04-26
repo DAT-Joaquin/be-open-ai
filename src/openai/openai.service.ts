@@ -31,11 +31,11 @@ export class OpenAIService {
         await this.openai.chat.completions.create({
           model: 'gpt-3.5-turbo',
           messages: [
+            ...history,
             {
-              role: 'system',
+              role: 'user',
               content: prompt,
             },
-            ...history,
           ],
           temperature: 0.8,
           max_tokens: 1000,

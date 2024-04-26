@@ -10,9 +10,6 @@ import configuration from './configs';
 import { JsonBodyMiddleware } from './middlewares/json-body.middleware';
 import { RawBodyMiddleware } from './middlewares/raw-body.middleware';
 import { OpenaiModule } from './openai/openai.module';
-import { S3Module } from './s3/s3.module';
-import { StoreModule } from './store/store.module';
-import { StripeModule } from './stripe/stripe.module';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -30,11 +27,11 @@ import { UserModule } from './user/user.module';
       }),
       inject: [ConfigService],
     }),
-    S3Module,
+    // S3Module,
     AuthModule,
     UserModule,
-    StoreModule,
-    StripeModule,
+    // StoreModule,
+    // StripeModule,
     OpenaiModule,
     ChatCompletionModule,
   ],
