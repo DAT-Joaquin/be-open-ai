@@ -87,7 +87,7 @@ export class AuthService {
     const user = await this.userService.findUserByEmailNotActive(query.email);
     if (user) {
       const token = this.jwtService.sign({ email: query.email });
-      this.mailService.sendMail({
+      await this.mailService.sendMail({
         to: query.email,
         subject: 'Xác minh email đăng ký tài khoản từ hệ thống Beta Cinemas',
         template: './verify-user',
@@ -116,7 +116,7 @@ export class AuthService {
     const userDB = await this.userService.findUserByEmail(body.email);
     if (userDB) {
       const token = this.jwtService.sign({ email: body.email });
-      this.mailService.sendMail({
+      await this.mailService.sendMail({
         to: body.email,
         subject: 'Đổi mật khẩu từ hệ thống Beta Cinemas',
         template: './forget-password',

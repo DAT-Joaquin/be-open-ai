@@ -22,7 +22,7 @@ export class OAuth2Service {
 
     const data: any = await this.userService.loginWithOauth2(req.user);
 
-    this.mailService.sendMail({
+    await this.mailService.sendMail({
       to: data.email,
       subject: 'Thông tin tài khoản đăng nhập từ hệ thống Beta Cinemas',
       template: './notify-account',
@@ -55,7 +55,7 @@ export class OAuth2Service {
 
     const data: any = await this.userService.loginWithOauth2(req.user?.user);
 
-    this.mailService.sendMail({
+    await this.mailService.sendMail({
       to: data.email,
       subject: 'Thông tin tài khoản đăng nhập từ hệ thống Beta Cinemas',
       template: './notify-account',
