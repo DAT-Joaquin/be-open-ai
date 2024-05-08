@@ -7,10 +7,10 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 // import { Role } from 'src/role/role.decorator';
-import { RolesGuard } from '../role/roles.guard';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
+import { RolesGuard } from '../role/roles.guard';
 import { User } from '../utils/user.decorator';
 import { UpdateUserDto } from './dto/index.dto';
 import { UserService } from './user.service';
@@ -25,6 +25,9 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @ApiOperation({
+    summary: 'Lấy thông tin cá nhân của người dùng',
+  })
   // @Role('user')
   @Get('')
   @HttpCode(HttpStatus.OK)
@@ -32,6 +35,9 @@ export class UserController {
     return this.userService.getDetailUser(user);
   }
 
+  @ApiOperation({
+    summary: 'Cập nhật thông tin cá nhân của người dùng',
+  })
   @Put('')
   @HttpCode(HttpStatus.OK)
   updateProfile(@User('_id') userId: string, @Body() body: UpdateUserDto) {

@@ -24,7 +24,7 @@ export class OAuth2Service {
 
     await this.mailService.sendMail({
       to: data.email,
-      subject: 'Thông tin tài khoản đăng nhập từ hệ thống Beta Cinemas',
+      subject: 'Thông tin tài khoản đăng nhập từ hệ thống Assistant AI',
       template: './notify-account',
       context: {
         email: data.email,
@@ -57,7 +57,7 @@ export class OAuth2Service {
 
     await this.mailService.sendMail({
       to: data.email,
-      subject: 'Thông tin tài khoản đăng nhập từ hệ thống Beta Cinemas',
+      subject: 'Thông tin tài khoản đăng nhập từ hệ thống Assistant AI',
       template: './notify-account',
       context: {
         email: data.email,

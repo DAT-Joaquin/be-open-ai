@@ -2,7 +2,7 @@ import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { OAuth2Service } from '../services/oauth2.service';
 // import { AuthGuard } from '@nestjs/passport';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { GoogleOAuthGuard } from '../guard/google-oauth.guard';
 
 @ApiTags('Google')
@@ -18,6 +18,9 @@ export class GoogleController {
   @UseGuards(GoogleOAuthGuard)
   async googleAuth() {}
 
+  @ApiOperation({
+    summary: 'Đăng nhập bằng google',
+  })
   @Get('redirect')
   // @UseGuards(AuthGuard('google'))
   @UseGuards(GoogleOAuthGuard)

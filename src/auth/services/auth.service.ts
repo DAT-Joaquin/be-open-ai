@@ -68,7 +68,7 @@ export class AuthService {
     const token = this.jwtService.sign({ email: body.email });
     await this.mailService.sendMail({
       to: body.email,
-      subject: 'Xác minh email đăng ký tài khoản từ hệ thống Beta Cinemas',
+      subject: 'Xác minh email đăng ký tài khoản từ hệ thống Assistant AI',
       template: './verify-user',
       context: {
         link: `${body.redirectUrl}?token=${token}&email=${body.email}`,
@@ -89,7 +89,7 @@ export class AuthService {
       const token = this.jwtService.sign({ email: query.email });
       await this.mailService.sendMail({
         to: query.email,
-        subject: 'Xác minh email đăng ký tài khoản từ hệ thống Beta Cinemas',
+        subject: 'Xác minh email đăng ký tài khoản từ hệ thống Assistant AI',
         template: './verify-user',
         context: {
           link: `${query.redirectUrl}?token=${token}&email=${query.email}`,
@@ -118,7 +118,7 @@ export class AuthService {
       const token = this.jwtService.sign({ email: body.email });
       await this.mailService.sendMail({
         to: body.email,
-        subject: 'Đổi mật khẩu từ hệ thống Beta Cinemas',
+        subject: 'Đổi mật khẩu từ hệ thống Assistant AI',
         template: './forget-password',
         context: {
           link: `${body.redirectUrl}?token=${token}&email=${body.email}`,

@@ -1,9 +1,8 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
-import { OAuth2Service } from '../services/oauth2.service';
 import { Request, Response } from 'express';
+import { OAuth2Service } from '../services/oauth2.service';
 // import { AuthGuard } from '@nestjs/passport';
-import { AuthGuard } from '@nestjs/passport';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { FacebookOAuthGuard } from '../guard/facebook-oauth.guard';
 
 @ApiTags('Facebook')
@@ -19,6 +18,9 @@ export class FacebookController {
   @UseGuards(FacebookOAuthGuard)
   async facebookAuth() {}
 
+  @ApiOperation({
+    summary: 'Đăng nhập bằng facebook',
+  })
   @Get('redirect')
   // @UseGuards(AuthGuard('google'))
   @UseGuards(FacebookOAuthGuard)
