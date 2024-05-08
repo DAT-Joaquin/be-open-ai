@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 // import { Role } from 'src/role/role.decorator';
-import { RolesGuard } from 'src/role/roles.guard';
+import { RolesGuard } from '../../src/role/roles.guard';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 import { User } from '../utils/user.decorator';
 import { UpdateUserDto } from './dto/index.dto';

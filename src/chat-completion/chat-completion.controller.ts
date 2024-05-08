@@ -11,8 +11,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
-import { User } from 'src/utils/user.decorator';
+import { JwtAuthGuard } from '../../src/auth/guard/jwt-auth.guard';
+import { User } from '../../src/utils/user.decorator';
 import { ChatCompletionService } from './chat-completion.service';
 import {
   ContinueChatDto,

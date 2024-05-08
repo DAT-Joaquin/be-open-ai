@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { OpenAIService } from 'src/openai/openai.service';
-import { formatedResponse } from 'src/utils';
+import { OpenAIService } from '../../src/openai/openai.service';
+import { formatedResponse } from '../../src/utils';
 import {
   ContinueChatDto,
   CreateNewChatDto,
