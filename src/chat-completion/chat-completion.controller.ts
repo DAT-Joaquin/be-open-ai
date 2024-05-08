@@ -18,6 +18,7 @@ import {
   ContinueChatDto,
   CreateNewChatDto,
   CreateStartChatDto,
+  RegenerateChatDto,
   RenameTitleChatDto,
   SaveChatDto,
 } from './dto/index.dto';
@@ -52,6 +53,7 @@ export class ChatCompletionController {
   createNewChat(@Body() body: CreateNewChatDto, @User('_id') userId: string) {
     return this.chatCompletionService.createNewChat(body, userId);
   }
+
   @ApiOperation({
     summary: 'Tiếp tục đoạn chat',
   })
@@ -59,6 +61,15 @@ export class ChatCompletionController {
   @HttpCode(HttpStatus.OK)
   continueChat(@Body() body: ContinueChatDto) {
     return this.chatCompletionService.continueChat(body);
+  }
+
+  @ApiOperation({
+    summary: 'Regenerate 1 phản hồi',
+  })
+  @Post('/regenerate-chat')
+  @HttpCode(HttpStatus.OK)
+  regenerateChat(@Body() body: RegenerateChatDto) {
+    return this.chatCompletionService.regenerateChat(body);
   }
 
   @ApiOperation({

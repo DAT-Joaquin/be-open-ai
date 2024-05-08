@@ -71,3 +71,17 @@ export class RenameTitleChatDto {
   @Expose()
   title: string;
 }
+
+export class RegenerateChatDto {
+  @IsNotEmpty()
+  @ApiProperty({ required: true })
+  @IsString()
+  @Expose()
+  id: string;
+
+  @IsNotEmpty()
+  @ApiProperty({ required: true })
+  @IsString()
+  @Expose()
+  prompt: string;
+}

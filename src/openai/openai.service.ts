@@ -18,7 +18,11 @@ export class OpenAIService {
     });
   }
 
-  async chatGptRequest(prompt: string, messages: Message[]): Promise<string> {
+  async chatGptRequest(
+    prompt: string,
+    messages: Message[],
+    createTitle = false,
+  ): Promise<string> {
     try {
       // Convert message history to the format expected by the OpenAI API
       const history: any = messages?.map((message) => ({
@@ -34,11 +38,14 @@ export class OpenAIService {
             ...history,
             {
               role: 'user',
-              content: prompt,
+              content: createTitle
+                ? prompt
+                : `Please response abount prompt of user: '${prompt}'. Notice format your response as html, without head, title, or body tags and must respond in the same language as the user's prompt`,
             },
           ],
           temperature: 0.8,
-          max_tokens: 1000,
+          max_tokens: 3000,
+          //Please format your answer as html, without head, title, or body tags
         });
 
       // Extract the content from the response

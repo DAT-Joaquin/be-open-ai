@@ -7,6 +7,7 @@ import {
   ContinueChatDto,
   CreateNewChatDto,
   CreateStartChatDto,
+  RegenerateChatDto,
   RenameTitleChatDto,
   SaveChatDto,
 } from './dto/index.dto';
@@ -29,6 +30,7 @@ export class ChatCompletionService {
     return this.openAIService.chatGptRequest(
       `Đặt ý chính thật ngắn gọn, độ dài không quá 30 ký tự cho câu văn sau: ${body.prompt}. `,
       [],
+      true,
     );
   }
 
@@ -43,8 +45,30 @@ export class ChatCompletionService {
         throw new HttpException('Chat not found', HttpStatus.NOT_FOUND);
       } else {
         const messages = chat.messages;
-        console.log(messages);
-        console.log('prompt', body.prompt);
+
+        return this.openAIService.chatGptRequest(
+          body.prompt,
+          messages as Message[],
+        );
+      }
+    } catch (err) {
+      throw new HttpException(err?.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async regenerateChat(body: RegenerateChatDto) {
+    try {
+      const chat = await this.ChatCompletionModel.findById(body.id);
+      if (!chat) {
+        throw new HttpException('Chat not found', HttpStatus.NOT_FOUND);
+      } else {
+        const messages = chat.messages;
+
+        messages.pop();
+        messages.pop();
+
+        await chat.updateOne({ messages });
+
         return this.openAIService.chatGptRequest(
           body.prompt,
           messages as Message[],
