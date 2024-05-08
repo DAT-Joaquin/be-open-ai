@@ -9,7 +9,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '../../user/dto/index.dto';
 import { UserService } from '../../user/user.service';
 import { User } from '../../utils/user.decorator';
@@ -19,6 +19,7 @@ import {
   GenerateNewTokenDto,
   GetAgainVerifyUser,
   LoginUserDto,
+  RegisterResponse,
 } from '../dto/index.dto';
 import { LocalAuthGuard } from '../guard/local-auth.guard';
 import { AuthService } from '../services/auth.service';
@@ -34,8 +35,9 @@ export class AuthController {
     private readonly userService: UserService,
   ) {}
 
+  @ApiOkResponse({ type: RegisterResponse })
   @ApiOperation({ summary: 'Register User' })
-  @Post('create')
+  @Post('register')
   @HttpCode(HttpStatus.CREATED)
   async createUser(@Body() createUserDto: CreateUserDto) {
     return this.authService.createUser(createUserDto);

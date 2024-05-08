@@ -65,3 +65,21 @@ export class GenerateNewTokenDto {
   @Expose()
   refreshToken: string;
 }
+
+export class RegisterResponse {
+  @ApiProperty({
+    example:
+      'Tạo tài khoản thành công. Vui lòng kiêm tra email để xác minh tài khoản.',
+  })
+  message: string;
+
+  @ApiProperty({
+    example: null,
+  })
+  data: object;
+
+  @ApiProperty({
+    example: 201,
+  })
+  statusCode: number;
+}
