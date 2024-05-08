@@ -66,7 +66,7 @@ export class AuthService {
       throw new HttpException(EmailExists, HttpStatus.BAD_REQUEST);
     }
     const token = this.jwtService.sign({ email: body.email });
-    this.mailService.sendMail({
+    await this.mailService.sendMail({
       to: body.email,
       subject: 'Xác minh email đăng ký tài khoản từ hệ thống Beta Cinemas',
       template: './verify-user',

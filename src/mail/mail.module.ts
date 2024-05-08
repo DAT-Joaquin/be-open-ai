@@ -29,7 +29,7 @@ import { join } from 'path';
           // },
         },
         defaults: {
-          from: 'Beta Cinemas <noreply@example.com>',
+          from: 'Assistant AI <noreply@example.com>',
         },
         template: {
           dir: join(__dirname, 'templates'),
