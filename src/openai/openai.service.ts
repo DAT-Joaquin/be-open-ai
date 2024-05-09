@@ -60,4 +60,24 @@ export class OpenAIService {
       throw new ServiceUnavailableException('Failed request to ChatGPT');
     }
   }
+
+  async generateImage(text: string, size: any): Promise<string> {
+    try {
+      console.log('text', text);
+      // Make a request to the DALL-E model for image generation
+      const { data } = await this.openai.images.generate({
+        model: 'dall-e-2',
+        prompt: text,
+        response_format: 'url',
+        size: size || '1024x1024',
+      });
+
+      // Return the URL of the generated image
+      return data[0].url;
+    } catch (e) {
+      // Log and propagate the error
+      console.error(e);
+      throw new ServiceUnavailableException('Failed to generate image');
+    }
+  }
 }

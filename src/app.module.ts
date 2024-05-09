@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { ChatCompletionModule } from './chat-completion/chat-completion.module';
 import configuration from './configs';
+import { ImageGeneratorModule } from './image-generator/image-generator.module';
 import { JsonBodyMiddleware } from './middlewares/json-body.middleware';
 import { RawBodyMiddleware } from './middlewares/raw-body.middleware';
 import { OpenaiModule } from './openai/openai.module';
@@ -34,6 +35,7 @@ import { UserModule } from './user/user.module';
     // StripeModule,
     OpenaiModule,
     ChatCompletionModule,
+    ImageGeneratorModule,
   ],
   controllers: [AppController],
   providers: [AppService],
