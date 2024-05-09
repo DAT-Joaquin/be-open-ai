@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   Query,
   UseGuards,
@@ -48,6 +49,7 @@ export class ImageGeneratorController {
     return this.imageGeneratorService.deleteImages(query);
   }
 
+  @ApiOperation({ summary: 'Lấy danh sách ảnh' })
   @Get('')
   @HttpCode(HttpStatus.OK)
   getListImage(
@@ -55,5 +57,12 @@ export class ImageGeneratorController {
     @Query() query: QueryGetListImagesDto,
   ) {
     return this.imageGeneratorService.getListImage(userId, query);
+  }
+
+  @ApiOperation({ summary: 'Lấy chi tiết 1 ảnh' })
+  @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  getDetailImage(@Param('id') id: string) {
+    return this.imageGeneratorService.getDetailImage(id);
   }
 }

@@ -86,4 +86,20 @@ export class ImageGeneratorService {
       }),
     };
   }
+
+  async getDetailImage(id: string) {
+    try {
+      const image = await this.ImageGeneratorModel.findById(id);
+      if (!image) {
+        throw new HttpException('Image not found', HttpStatus.NOT_FOUND);
+      }
+      const data = formatedResponse(image);
+      delete data.userId;
+      return {
+        data,
+      };
+    } catch (err) {
+      throw new HttpException(err?.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }
