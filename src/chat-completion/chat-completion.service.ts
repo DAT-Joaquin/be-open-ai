@@ -5,11 +5,9 @@ import { OpenAIService } from '../openai/openai.service';
 import { formatedResponse } from '../utils';
 import {
   ContinueChatDto,
-  CreateNewChatDto,
   CreateStartChatDto,
   RegenerateChatDto,
   RenameTitleChatDto,
-  SaveChatDto,
 } from './dto/index.dto';
 import { ChatCompletionDocument } from './model/chat-completion.model';
 
@@ -26,107 +24,198 @@ export class ChatCompletionService {
     private readonly openAIService: OpenAIService,
   ) {}
 
-  async createTitleForChat(body: CreateStartChatDto) {
-    return this.openAIService.chatGptRequest(
-      `Đặt ý chính thật ngắn gọn, độ dài không quá 30 ký tự cho câu văn sau: ${body.prompt}. `,
-      [],
-      true,
-    );
-  }
+  // async createTitleForChat(body: CreateStartChatDto) {
+  //   return this.openAIService.chatGptRequest(
+  //     `Đặt ý chính thật ngắn gọn, độ dài không quá 30 ký tự cho câu văn sau: ${body.prompt}. `,
+  //     [],
+  //     true,
+  //   );
+  // }
 
-  async createNewStartChat(body: CreateStartChatDto) {
-    return this.openAIService.chatGptRequest(body.prompt, []);
-  }
-
-  async continueChat(body: ContinueChatDto) {
+  async createNewChat(body: CreateStartChatDto, userId?: string) {
+    let _title = '';
+    let _result = '';
+    let id = '';
     try {
-      const chat = await this.ChatCompletionModel.findById(body.id);
-      if (!chat) {
-        throw new HttpException('Chat not found', HttpStatus.NOT_FOUND);
-      } else {
-        const messages = chat.messages;
+      const [title, result, { _id }] = await Promise.all([
+        this.openAIService.chatGptRequest(
+          `Đặt ý chính thật ngắn gọn, độ dài không quá 30 ký tự cho câu văn sau: ${body.prompt}. `,
+          [],
+          true,
+        ),
+        this.openAIService.chatGptRequest(body.prompt, []),
+        this.ChatCompletionModel.create({
+          createdAt: new Date(),
+          userId,
+        }),
+      ]);
+      _title = title;
+      _result = result;
+      id = _id;
 
-        return this.openAIService.chatGptRequest(
-          body.prompt,
-          messages as Message[],
-        );
-      }
-    } catch (err) {
-      throw new HttpException(err?.message, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
-
-  async regenerateChat(body: RegenerateChatDto) {
-    try {
-      const chat = await this.ChatCompletionModel.findById(body.id);
-      if (!chat) {
-        throw new HttpException('Chat not found', HttpStatus.NOT_FOUND);
-      } else {
-        const messages = chat.messages;
-
-        messages.pop();
-        messages.pop();
-
-        await chat.updateOne({ messages });
-
-        return this.openAIService.chatGptRequest(
-          body.prompt,
-          messages as Message[],
-        );
-      }
-    } catch (err) {
-      throw new HttpException(err?.message, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
-
-  async createNewChat(body: CreateNewChatDto, userId?: string) {
-    try {
-      const messages = [
-        {
-          text: body.firstQuestion,
-          ai: false,
-        },
-        {
-          text: body.firstAnswer,
-          ai: true,
-        },
-      ];
-
-      const newChat = await this.ChatCompletionModel.create({
-        title: body.title,
-        messages,
-        createdAt: new Date(),
-        userId,
-      });
       return {
-        _id: newChat._id,
+        title,
+        result,
+        id: _id,
       };
     } catch (err) {
       throw new HttpException(err?.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    } finally {
+      setImmediate(async () => {
+        try {
+          const chat = await this.ChatCompletionModel.findById(id);
+          if (!chat) {
+            console.error('Chat not found');
+          } else {
+            const messages = [
+              { text: body.prompt, ai: false },
+              { text: _result, ai: true },
+            ];
+            await chat.updateOne({ messages, title: _title });
+          }
+        } catch (err) {
+          console.error('Error in finally block:', err);
+        }
+      });
     }
+
+    // return this.openAIService.chatGptRequest(body.prompt, []);
   }
 
-  async saveChat(body: SaveChatDto) {
+  async continueChat(body: ContinueChatDto) {
+    let result: any;
+    let messages: any;
     try {
       const chat = await this.ChatCompletionModel.findById(body.id);
       if (!chat) {
         throw new HttpException('Chat not found', HttpStatus.NOT_FOUND);
       } else {
-        let messages = chat.messages;
-        messages = [
-          ...messages,
-          { text: body.question, ai: false },
-          { text: body.answer, ai: true },
-        ];
-        await chat.updateOne({ messages });
+        messages = chat.messages;
+
+        result = await this.openAIService.chatGptRequest(
+          body.prompt,
+          messages as Message[],
+        );
+
         return {
-          message: 'Save successfully',
+          result,
         };
       }
     } catch (err) {
       throw new HttpException(err?.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    } finally {
+      setImmediate(async () => {
+        try {
+          await this.ChatCompletionModel.updateOne(
+            { _id: body.id },
+            {
+              messages: [
+                ...messages,
+                { text: body.prompt, ai: false },
+                { text: result, ai: true },
+              ],
+            },
+          );
+        } catch (err) {
+          console.error('Error in finally block:', err);
+        }
+      });
     }
   }
+
+  async regenerateChat(body: RegenerateChatDto) {
+    let result: any;
+    let messages: any;
+    try {
+      const chat = await this.ChatCompletionModel.findById(body.id);
+      if (!chat) {
+        throw new HttpException('Chat not found', HttpStatus.NOT_FOUND);
+      } else {
+        messages = chat.messages;
+
+        messages.pop();
+        messages.pop();
+
+        // await chat.updateOne({ messages });
+
+        result = await this.openAIService.chatGptRequest(
+          body.prompt,
+          messages as Message[],
+        );
+        return {
+          result,
+        };
+      }
+    } catch (err) {
+      throw new HttpException(err?.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    } finally {
+      setImmediate(async () => {
+        try {
+          await this.ChatCompletionModel.updateOne(
+            { _id: body.id },
+            {
+              messages: [
+                ...messages,
+                { text: body.prompt, ai: false },
+                { text: result, ai: true },
+              ],
+            },
+          );
+        } catch (err) {
+          console.error('Error in finally block:', err);
+        }
+      });
+    }
+  }
+
+  // async createNewChat(body: CreateNewChatDto, userId?: string) {
+  //   try {
+  //     const messages = [
+  //       {
+  //         text: body.firstQuestion,
+  //         ai: false,
+  //       },
+  //       {
+  //         text: body.firstAnswer,
+  //         ai: true,
+  //       },
+  //     ];
+
+  //     const newChat = await this.ChatCompletionModel.create({
+  //       title: body.title,
+  //       messages,
+  //       createdAt: new Date(),
+  //       userId,
+  //     });
+  //     return {
+  //       _id: newChat._id,
+  //     };
+  //   } catch (err) {
+  //     throw new HttpException(err?.message, HttpStatus.INTERNAL_SERVER_ERROR);
+  //   }
+  // }
+
+  // async saveChat(body: SaveChatDto) {
+  //   try {
+  //     const chat = await this.ChatCompletionModel.findById(body.id);
+  //     if (!chat) {
+  //       throw new HttpException('Chat not found', HttpStatus.NOT_FOUND);
+  //     } else {
+  //       let messages = chat.messages;
+  //       messages = [
+  //         ...messages,
+  //         { text: body.question, ai: false },
+  //         { text: body.answer, ai: true },
+  //       ];
+  //       await chat.updateOne({ messages });
+  //       return {
+  //         message: 'Save successfully',
+  //       };
+  //     }
+  //   } catch (err) {
+  //     throw new HttpException(err?.message, HttpStatus.INTERNAL_SERVER_ERROR);
+  //   }
+  // }
 
   async getListChat(userId: string) {
     try {

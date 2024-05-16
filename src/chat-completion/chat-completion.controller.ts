@@ -10,17 +10,21 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 import { User } from '../utils/user.decorator';
 import { ChatCompletionService } from './chat-completion.service';
 import {
   ContinueChatDto,
-  CreateNewChatDto,
+  CreateNewChatResponse,
   CreateStartChatDto,
   RegenerateChatDto,
   RenameTitleChatDto,
-  SaveChatDto,
 } from './dto/index.dto';
 
 @ApiTags('Chat Completion')
@@ -28,31 +32,35 @@ import {
 export class ChatCompletionController {
   constructor(private readonly chatCompletionService: ChatCompletionService) {}
 
-  @ApiOperation({ summary: 'Đặt tiêu đề cho đoạn chat mới' })
-  @Post('/create-title-for-new-chat')
-  @HttpCode(HttpStatus.OK)
-  createTitleForChat(@Body() body: CreateStartChatDto) {
-    return this.chatCompletionService.createTitleForChat(body);
-  }
-
-  @ApiOperation({
-    summary: 'Bắt đầu câu hỏi đầu tiên (câu hỏi mở đầu) của 1 đoạn chat mới',
-  })
-  @Post('/create-start-chat')
-  @HttpCode(HttpStatus.OK)
-  createNewStartChatAnonymous(@Body() body: CreateStartChatDto) {
-    return this.chatCompletionService.createNewStartChat(body);
-  }
-
+  // @ApiOperation({ summary: 'Đặt tiêu đề cho đoạn chat mới' })
+  // @Post('/create-title-for-new-chat')
+  // @HttpCode(HttpStatus.OK)
+  // createTitleForChat(@Body() body: CreateStartChatDto) {
+  //   return this.chatCompletionService.createTitleForChat(body);
+  // }
+  @ApiOkResponse({ type: CreateNewChatResponse })
   @ApiOperation({
     summary:
-      'Tạo đoạn chat mới. Sau khi tạo đoạn chat mới thành công xong thì trả về id của đoạn chat đó',
+      'Bắt đầu 1 đoạn chat mới. Khi gọi api này thành công, api sẽ trả về title, result (là câu phản hồi cho prompt gửi lên) và id của đoạn chat mới',
   })
   @Post('/create-new-chat')
   @HttpCode(HttpStatus.OK)
-  createNewChat(@Body() body: CreateNewChatDto, @User('_id') userId: string) {
+  createNewStartChatAnonymous(
+    @Body() body: CreateStartChatDto,
+    @User('_id') userId: string,
+  ) {
     return this.chatCompletionService.createNewChat(body, userId);
   }
+
+  // @ApiOperation({
+  //   summary:
+  //     'Tạo đoạn chat mới. Sau khi tạo đoạn chat mới thành công xong thì trả về id của đoạn chat đó',
+  // })
+  // @Post('/create-new-chat')
+  // @HttpCode(HttpStatus.OK)
+  // createNewChat(@Body() body: CreateNewChatDto, @User('_id') userId: string) {
+  //   return this.chatCompletionService.createNewChat(body, userId);
+  // }
 
   @ApiOperation({
     summary: 'Tiếp tục đoạn chat',
@@ -72,14 +80,14 @@ export class ChatCompletionController {
     return this.chatCompletionService.regenerateChat(body);
   }
 
-  @ApiOperation({
-    summary: 'Lưu trữ đoạn chat',
-  })
-  @Post('/save-chat')
-  @HttpCode(HttpStatus.OK)
-  saveChat(@Body() body: SaveChatDto) {
-    return this.chatCompletionService.saveChat(body);
-  }
+  // @ApiOperation({
+  //   summary: 'Lưu trữ đoạn chat',
+  // })
+  // @Post('/save-chat')
+  // @HttpCode(HttpStatus.OK)
+  // saveChat(@Body() body: SaveChatDto) {
+  //   return this.chatCompletionService.saveChat(body);
+  // }
 
   @ApiOperation({
     summary: 'Lấy danh sách tất cả đoạn chat của user hiện tại',

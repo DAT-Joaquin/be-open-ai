@@ -85,3 +85,20 @@ export class RegenerateChatDto {
   @Expose()
   prompt: string;
 }
+
+export class CreateNewChatResponse {
+  @ApiProperty({
+    example: 'Yêu cầu giúp đỡ.',
+  })
+  title: string;
+
+  @ApiProperty({
+    example: 'Vâng. Tôi rất sẵn lòng giúp đỡ bạn. Câu hỏi của bạn là gì vậy?',
+  })
+  result: object;
+
+  @ApiProperty({
+    example: 'abc123werdsg34523',
+  })
+  id: string;
+}

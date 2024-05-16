@@ -6,13 +6,13 @@ export type ChatCompletionDocument = ChatCompletion & Document;
 
 @Schema()
 export class ChatCompletion {
-  @Prop({ required: true })
+  @Prop({ required: false })
   title: string;
 
-  @Prop({ required: true, type: Array })
+  @Prop({ required: false, type: Array })
   messages: object[];
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   createdAt: Date;
 
   @Prop({ required: false, ref: 'User', type: MongooseSchema.Types.ObjectId })
