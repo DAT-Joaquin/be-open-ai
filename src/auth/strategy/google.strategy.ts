@@ -40,7 +40,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     profile: any,
     done: VerifyCallback,
   ): Promise<any> {
-    // console.log('profile', profile);
+    console.log('profile', profile);
     const { name, emails, photos } = profile;
     const user = {
       email: emails[0].value,
