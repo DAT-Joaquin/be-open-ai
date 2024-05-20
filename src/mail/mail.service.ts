@@ -17,7 +17,7 @@ export class MailService {
       });
     } catch (error) {
       console.log(error);
-      console.log('Error mail', error?.response);
+      // console.log('Error mail', error?.response);
     }
   }
 }
