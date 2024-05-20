@@ -63,7 +63,6 @@ export class OpenAIService {
 
   async generateImage(text: string, size: any): Promise<string> {
     try {
-      console.log('text', text);
       // Make a request to the DALL-E model for image generation
       const { data } = await this.openai.images.generate({
         model: 'dall-e-2',
