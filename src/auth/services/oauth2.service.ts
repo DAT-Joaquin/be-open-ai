@@ -22,15 +22,15 @@ export class OAuth2Service {
 
     const data: any = await this.userService.loginWithOauth2(req.user);
 
-    await this.mailService.sendMail({
-      to: data.email,
-      subject: 'Thông tin tài khoản đăng nhập từ hệ thống AI Assistant',
-      template: './notify-account',
-      context: {
-        email: data.email,
-        password: data.password,
-      },
-    });
+    // await this.mailService.sendMail({
+    //   to: data.email,
+    //   subject: 'Thông tin tài khoản đăng nhập từ hệ thống AI Assistant',
+    //   template: './notify-account',
+    //   context: {
+    //     email: data.email,
+    //     password: data.password,
+    //   },
+    // });
 
     res.redirect(
       redirect_url +
@@ -55,15 +55,15 @@ export class OAuth2Service {
 
     const data: any = await this.userService.loginWithOauth2(req.user?.user);
 
-    await this.mailService.sendMail({
-      to: data.email,
-      subject: 'Thông tin tài khoản đăng nhập từ hệ thống AI Assistant',
-      template: './notify-account',
-      context: {
-        email: data.email,
-        password: data.password,
-      },
-    });
+    // await this.mailService.sendMail({
+    //   to: data.email,
+    //   subject: 'Thông tin tài khoản đăng nhập từ hệ thống AI Assistant',
+    //   template: './notify-account',
+    //   context: {
+    //     email: data.email,
+    //     password: data.password,
+    //   },
+    // });
 
     res.redirect(
       redirect_url +

@@ -2,12 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import {
-  GoogleUser,
-  formatedResponse,
-  generateRandomPassword,
-  numberCreditUse,
-} from '../utils';
+import { GoogleUser, formatedResponse, numberCreditUse } from '../utils';
 import { encodePassword } from '../utils/bcrypt';
 import { SuccessRegister } from '../utils/message';
 import { CreateUserDto, QueryTypeUseDto, UpdateUserDto } from './dto/index.dto';
@@ -112,7 +107,7 @@ export class UserService {
       { expiresIn: '7d' },
     );
 
-    const password = generateRandomPassword();
+    // const password = generateRandomPassword();
 
     if (userCurrent && !userCurrent.isVerified) {
       await this.UserModel.updateOne(
@@ -128,7 +123,7 @@ export class UserService {
       await this.UserModel.create({
         email: user.email,
         firstName: user.firstName,
-        password: encodePassword(password),
+        // password: encodePassword(password),
         ...(user.lastName ? { lastName: user.lastName } : ''),
         // lastName: user.lastName || '',
         avatar: user.picture,
@@ -139,8 +134,8 @@ export class UserService {
     return {
       accessToken: token,
       refreshToken,
-      password,
-      email: user.email,
+      // password,
+      // email: user.email,
     };
   }
 
