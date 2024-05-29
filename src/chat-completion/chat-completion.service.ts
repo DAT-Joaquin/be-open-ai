@@ -32,7 +32,50 @@ export class ChatCompletionService {
   //   );
   // }
 
+  async createNewChatPublic(body: CreateStartChatDto) {
+    let _result = '';
+    let id = '';
+    try {
+      const [result, { _id }] = await Promise.all([
+        this.openAIService.chatGptRequest(body.prompt, []),
+        this.ChatCompletionModel.create({
+          createdAt: new Date(),
+        }),
+      ]);
+
+      _result = result;
+      id = _id;
+
+      return {
+        result,
+        id: _id,
+      };
+    } catch (err) {
+      throw new HttpException(err?.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    } finally {
+      setImmediate(async () => {
+        try {
+          const chat = await this.ChatCompletionModel.findById(id);
+          if (!chat) {
+            console.error('Chat not found');
+          } else {
+            const messages = [
+              { text: body.prompt, ai: false },
+              { text: _result, ai: true },
+            ];
+            await chat.updateOne({ messages });
+          }
+        } catch (err) {
+          console.error('Error in finally block:', err);
+        }
+      });
+    }
+
+    // return this.openAIService.chatGptRequest(body.prompt, []);
+  }
+
   async createNewChat(body: CreateStartChatDto, userId?: string) {
+    // console.log('userID', userId);
     let _title = '';
     let _result = '';
     let id = '';
@@ -245,11 +288,30 @@ export class ChatCompletionService {
   async getDetailChat(id: string) {
     try {
       const chat = await this.ChatCompletionModel.findById(id);
+
       if (!chat) {
         throw new HttpException('Chat not found', HttpStatus.NOT_FOUND);
       }
+      // chat {
+      //   _id: new ObjectId("6656ecc3857011918785c716"),
+      //   createdAt: 2024-05-29T08:52:19.970Z,
+      //   userId: new ObjectId("66554e98c0eb5b6100936e9a"),
+      //   __v: 0,
+      //   messages: [
+      //     { text: 'Ban o dau', ai: false },
+      //     {
+      //       text: '<p>Đây là một câu hỏi mở và không rõ ràng. Bạn có thể cung cấp thêm thông tin để chúng tôi có thể giúp bạn tốt hơn không?</p>',
+      //       ai: true
+      //     }
+      //   ],
+      //   title: 'Bạn ở đâu?'
+      // }
       return {
-        data: formatedResponse(chat),
+        data: {
+          // id: chat._id,
+          createdAt: chat.createdAt,
+          messages: chat.messages,
+        },
       };
     } catch (err) {
       throw new HttpException(err?.message, HttpStatus.INTERNAL_SERVER_ERROR);

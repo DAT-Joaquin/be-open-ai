@@ -38,14 +38,28 @@ export class ChatCompletionController {
   // createTitleForChat(@Body() body: CreateStartChatDto) {
   //   return this.chatCompletionService.createTitleForChat(body);
   // }
+
   @ApiOkResponse({ type: CreateNewChatResponse })
   @ApiOperation({
     summary:
-      'Bắt đầu 1 đoạn chat mới. Khi gọi api này thành công, api sẽ trả về title, result (là câu phản hồi cho prompt gửi lên) và id của đoạn chat mới',
+      'Dùng api này khi người dùng chưa đăng nhâp để bắt đầu 1 đoạn chat mới. Khi gọi api này thành công, api sẽ trả về result (là câu phản hồi cho prompt gửi lên) và id của đoạn chat mới',
   })
+  @Post('/public/create-new-chat')
+  @HttpCode(HttpStatus.OK)
+  createPublicNewStartChat(@Body() body: CreateStartChatDto) {
+    return this.chatCompletionService.createNewChat(body);
+  }
+
+  @ApiOkResponse({ type: CreateNewChatResponse })
+  @ApiOperation({
+    summary:
+      'Dùng api này khi người dùng đã đăng nhập để bắt đầu 1 đoạn chat mới. Khi gọi api này thành công, api sẽ trả về title, result (là câu phản hồi cho prompt gửi lên) và id của đoạn chat mới',
+  })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Post('/create-new-chat')
   @HttpCode(HttpStatus.OK)
-  createNewStartChatAnonymous(
+  createNewStartChat(
     @Body() body: CreateStartChatDto,
     @User('_id') userId: string,
   ) {
