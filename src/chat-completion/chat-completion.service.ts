@@ -273,7 +273,9 @@ export class ChatCompletionService {
 
   async getListTitleChat(userId: string) {
     try {
-      const chats = await this.ChatCompletionModel.find({ userId });
+      const chats = await this.ChatCompletionModel.find({ userId }).sort({
+        createdAt: -1, // Sort by createdAt in descending order
+      });
       return {
         data: chats?.map((item) => ({
           id: item._id,
