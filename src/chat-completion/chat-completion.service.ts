@@ -317,6 +317,7 @@ export class ChatCompletionService {
           // id: chat._id,
           createdAt: chat.createdAt,
           messages: chat.messages,
+          title: chat.title,
         },
       };
     } catch (err) {
