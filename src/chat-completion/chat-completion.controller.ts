@@ -126,8 +126,8 @@ export class ChatCompletionController {
   @ApiOperation({
     summary: 'Lấy nội dung chi tiết của đoạn chat',
   })
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
+  // @UseGuards(JwtAuthGuard)
+  // @ApiBearerAuth()
   @Get('/get-detail-chat/:id')
   getDetailChat(@Param('id') id: string) {
     return this.chatCompletionService.getDetailChat(id);
