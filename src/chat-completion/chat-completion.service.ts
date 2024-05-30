@@ -264,7 +264,9 @@ export class ChatCompletionService {
     try {
       const chats = await this.ChatCompletionModel.find({ userId });
       return {
-        data: chats?.map((item) => formatedResponse(item)),
+        data: chats
+          ?.filter((item) => item?.title)
+          ?.map((item) => formatedResponse(item)),
       };
     } catch (err) {
       throw new HttpException(err?.message, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -277,10 +279,12 @@ export class ChatCompletionService {
         createdAt: -1, // Sort by createdAt in descending order
       });
       return {
-        data: chats?.map((item) => ({
-          id: item._id,
-          title: item.title,
-        })),
+        data: chats
+          ?.filter((item) => item?.title)
+          ?.map((item) => ({
+            id: item._id,
+            title: item.title,
+          })),
       };
     } catch (err) {
       throw new HttpException(err?.message, HttpStatus.INTERNAL_SERVER_ERROR);
