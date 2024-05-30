@@ -33,7 +33,7 @@ export class OpenAIService {
       // Make a request to the ChatGPT model
       const completion: ChatCompletion =
         await this.openai.chat.completions.create({
-          model: 'gpt-3.5-turbo-0125',
+          model: 'gpt-3.5-turbo',
           messages: [
             ...history,
             {
