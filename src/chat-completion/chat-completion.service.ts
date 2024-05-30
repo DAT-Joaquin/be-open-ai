@@ -92,7 +92,7 @@ export class ChatCompletionService {
           userId,
         }),
       ]);
-      _title = 'New chat' + Math.floor(Math.random() * 1000) + 1;
+      _title = 'New chat ' + Math.floor(Math.random() * 1000) + 1;
       _result = result;
       id = _id;
 
