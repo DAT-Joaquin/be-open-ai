@@ -9,7 +9,7 @@ type Message = {
   ai?: boolean; // Indicate if the message is from the AI
 };
 
-@Injectable()
+@Injectable() 
 export class OpenAIService {
   public openai: OpenAIApi;
   constructor(private readonly configService: ConfigService) {

@@ -21,7 +21,21 @@ export class ImageGeneratorService {
   ) {}
 
   async generateImage(body: GenerateImageDto) {
-    const url = await this.openAIService.generateImage(body.prompt, body.size);
+    // const url = await this.openAIService.generateImage(body.prompt, body.size);
+    const listImage = [
+      'https://static.vecteezy.com/system/resources/previews/027/491/621/non_2x/doraemon-illustration-free-vector.jpg',
+      'https://thumbs.dreamstime.com/b/doraemon-tokoh-robot-kucing-karakter-fiksi-dalam-serial-kartun-anime-di-jepang-266923243.jpg',
+      'https://laz-img-sg.alicdn.com/p/a9c97a082efe5ffb5aba747a045c259f.jpg',
+      'https://i.pinimg.com/736x/bf/eb/a8/bfeba832a872fef7b0426e3c314041d9.jpg',
+      'https://images.toplist.vn/images/800px/nhung-thanh-tich-bat-hu-cua-nobita-583176.jpg',
+      'https://bizweb.dktcdn.net/thumb/1024x1024/100/253/478/products/179322349-837413886822614-1295652114930682872-n.jpg?v=1626851860270',
+      'https://qph.cf2.quoracdn.net/main-qimg-284df7f935d898beb05f222a581ba8ad-lq',
+      'https://w7.pngwing.com/pngs/750/591/png-transparent-doraemon-character-illustration-doraemon-g%C5%8Dda-takeshi-character-nobita-nobi-doraemon-child-hand-people.png',
+      'https://photosnow.org/wp-content/uploads/2024/04/doraemon-nobita-photo_21.jpg',
+      'https://product.hstatic.net/1000231532/product/tomica_ania_nobita___kyu_-_doraemon_nobita_s_new_dinosaur_0d40439215584951b5ec9f24b94e92a1_grande.jpg',
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSx0GhJZQyiwS25dCh9vKPeov7Hhg122n83ow&s',
+    ];
+    const url = listImage[Math.floor(Math.random() * listImage.length)];
     return {
       url,
     };
