@@ -9,7 +9,7 @@ export class ChatCompletion {
   @Prop({ required: false })
   title: string;
 
-  @Prop({ required: false, type: Array })
+  @Prop({ required: false, type: Array, default: [] })
   messages: object[];
 
   @Prop({ required: false })

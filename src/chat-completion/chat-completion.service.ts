@@ -74,6 +74,38 @@ export class ChatCompletionService {
     // return this.openAIService.chatGptRequest(body.prompt, []);
   }
 
+  async createEmptyNewChat(userId: string) {
+    try {
+      // const [order, { _id }] = await Promise.all([
+      //   this.ChatCompletionModel.countDocuments({
+      //     userId,
+      //   }),
+      //   this.ChatCompletionModel.create({
+      //     createdAt: new Date(),
+      //     userId,
+      //   }),
+      // ]);
+      const orderOfNewChat = await this.ChatCompletionModel.countDocuments({
+        userId,
+      });
+      const chat = await this.ChatCompletionModel.create({
+        createdAt: new Date(),
+        userId,
+        title: `New chat ${orderOfNewChat + 1}`,
+      });
+
+      return {
+        id: chat._id,
+      };
+      // return {
+      //   id: _id,
+      //   title: `New chat ${order + 1}`,
+      // };
+    } catch (err) {
+      throw new HttpException(err?.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   async createNewChat(body: CreateStartChatDto, userId?: string) {
     // console.log('userID', userId);
     let _title = '';
@@ -92,7 +124,8 @@ export class ChatCompletionService {
           userId,
         }),
       ]);
-      _title = 'New chat ' + Math.floor(Math.random() * 1000) + 1;
+      // _title = 'New chat ' + Math.floor(Math.random() * 1000) + 1;
+      _title = title;
       _result = result;
       id = _id;
 

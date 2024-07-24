@@ -42,7 +42,7 @@ export class ChatCompletionController {
   @ApiOkResponse({ type: CreateNewChatResponse })
   @ApiOperation({
     summary:
-      'Dùng api này khi người dùng chưa đăng nhâp để bắt đầu 1 đoạn chat mới. Khi gọi api này thành công, api sẽ trả về result (là câu phản hồi cho prompt gửi lên) và id của đoạn chat mới',
+      'Dùng api này khi người dùng chưa đăng nhập để bắt đầu 1 đoạn chat mới. Khi gọi api này thành công, api sẽ trả về result (là câu phản hồi cho prompt gửi lên) và id của đoạn chat mới',
   })
   @Post('/public/create-new-chat')
   @HttpCode(HttpStatus.OK)
@@ -50,21 +50,34 @@ export class ChatCompletionController {
     return this.chatCompletionService.createNewChat(body);
   }
 
-  @ApiOkResponse({ type: CreateNewChatResponse })
+  // @ApiOkResponse({ type: CreateNewChatResponse })
   @ApiOperation({
     summary:
-      'Dùng api này khi người dùng đã đăng nhập để bắt đầu 1 đoạn chat mới. Khi gọi api này thành công, api sẽ trả về title, result (là câu phản hồi cho prompt gửi lên) và id của đoạn chat mới',
+      'Dùng api này khi người dùng đã đăng nhập để tạo 1 đoạn chat mới trống, tức là đoạn chat chưa có title và cũng chưa có bất kỳ nội dung chat nào. Api sẽ trả ra id của đoạn chat mới',
   })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @Post('/create-new-chat')
+  @Post('/create-new-empty-chat')
   @HttpCode(HttpStatus.OK)
-  createNewStartChat(
-    @Body() body: CreateStartChatDto,
-    @User('_id') userId: string,
-  ) {
-    return this.chatCompletionService.createNewChat(body, userId);
+  createNewEmptyChat(@User('_id') userId: string) {
+    return this.chatCompletionService.createEmptyNewChat(userId);
   }
+
+  // @ApiOkResponse({ type: CreateNewChatResponse })
+  // @ApiOperation({
+  //   summary:
+  //     'Dùng api này khi người dùng đã đăng nhập để bắt đầu 1 đoạn chat mới. Khi gọi api này thành công, api sẽ trả về title, result (là câu phản hồi cho prompt gửi lên) và id của đoạn chat mới',
+  // })
+  // @UseGuards(JwtAuthGuard)
+  // @ApiBearerAuth()
+  // @Post('/create-new-chat')
+  // @HttpCode(HttpStatus.OK)
+  // createNewStartChat(
+  //   @Body() body: CreateStartChatDto,
+  //   @User('_id') userId: string,
+  // ) {
+  //   return this.chatCompletionService.createNewChat(body, userId);
+  // }
 
   // @ApiOperation({
   //   summary:
